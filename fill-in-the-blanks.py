@@ -34,42 +34,42 @@ tuple, and ___4___ or can be more complicated such as objects and lambda functio
 
 # If you need help, you can sign up for a 1 on 1 coaching appointment: https://calendly.com/ipnd-1-1/20min/
 
-easy = '''__1__ is the biggest city of the USA. __2__ is the capital of Japan. 
+easy = '''QUIZ: New __1__ is the biggest city of the USA. __2__ is the capital of Japan. 
 __3__ is the capital of South Korea. __4__ is the capital of Canada.'''
-medium = '''__1__ is last name of the president of South Korea now. __2__ is  
-the last name of the president of USA. __3__ is the first name of the previous 
+medium = '''QUIZ: Jae-in __1__ is the president of South Korea now. Donald __2__ is 
+the president of USA. __3__ Obama is the previous 
 president of USA, and his wife's first name is __4__.'''
-hard = '''An existentialist novel 'Stranger' is written by __1__. This novel is 
+hard = '''QUIZ: An existentialist novel 'Stranger' is written by Albert __1__. This novel is 
 famous for its first sentence, 'Mother died today. Or maybe, yesterday; 
 I can't be sure', a quote by the main character, __2__. Norwegian Wood is 
-a Japanese novel written by __3__. In this novel, Watanabe longs for a girl 
+a Japanese novel written by Murakami __3__. In this novel, Watanabe longs for a girl 
 named __4__, who also longs for her dead lover.'''
-answer_easy = ['New York', 'Tokyo', 'Seoul', 'Ottawa']
+answer_easy = ['York', 'Tokyo', 'Seoul', 'Ottawa']
 answer_medium = ['Moon', 'Trump', 'Barack', 'Michelle']
-answer_hard = ['Camus', 'Meursault', 'Murakami Haruki', 'Naoko']
+answer_hard = ['Camus', 'Meursault', 'Haruki', 'Naoko']
 
 check_list = ["__1__", "__2__", "__3__", "__4__", "NUMBER"]
 
-ques_mode = '''Please select a game difficulty by typing it in!
+ques_mode = '''Q: Please select a game difficulty by typing it in!
 Possible choices include EASY, MEDIUM, and HARD!!'''
-info_difficulty = "You've chosen " 
-ques_num_try = "how many tries do you want to have to win?"
-info_num_try = "You will get 5 guesses per problem. (The answers are case sensitive)"
-info_current_psg = 'The current passage reads as such:' + '\n' + '____________________________________________________________'
-question = "What should be substituted in for NUMBER?"
+info_difficulty = "INFO: You've chosen " 
+ques_num_try = "Q: How many tries do you want to have to win?"
+info_num_try = "INFO: You will get NUMBER guess(es) per problem. (The answers are case sensitive)"
+info_current_psg = 'INFO: The current passage reads as such:' + '\n' + '____________________________________________________________'
+question = "Q: What should be substituted in for NUMBER?"
 
-def get_game(caller):
-    if caller == 'easy':
+def get_game(caller):                                       # procedure that takes as input a user's input, 
+    if caller == 'easy':                                    # and returns a sentence for the game
         return easy
     if caller == 'medium':
         return medium
     if caller == 'hard':
         return hard      
-    else:
-        print "Your input contains a typo. Type it again."
+    else:                                                   # if user's input has a typo, give more tries
+        print "INFO: Your input contains a typo. Type it again."   
         return opening()
 
-def get_answer(answer_caller):
+def get_answer(answer_caller):                              # test paper
     if answer_caller == 'easy':
         return answer_easy
     if answer_caller == 'medium':
@@ -77,16 +77,31 @@ def get_answer(answer_caller):
     if answer_caller == 'hard':
         return answer_hard   
 
-def word_checker(word, check_list):
-    for pos in check_list:
+def word_checker(word, check_list):                         # procedure that takes as input each word in sentence, 
+    for pos in check_list:                                  # and picks out and returns only the positions for the word to be replaced
         if pos in word:
             return pos
     return None
 
-def get_ques_numbered(sentence, num_to_replace):
-    replaced = []
-    sentence = sentence.split()
+def get_sent_num_try(sentence, input_number):               # procedure, to return the sentence informing 
+    replaced = []                                           # how many tries user will get, taking as input 
+    sentence = sentence.split()                             # an user's input number for it
     for word in sentence:
+        replacement = word_checker(word, check_list)
+        if replacement != None:
+            word = word.replace(replacement, input_number)
+            replaced.append(word)
+        else:
+            replaced.append(word)
+    else:
+        replaced.append(word)
+    replaced = ' '.join(replaced)
+    return replaced
+
+def get_ques_numbered(sentence, num_to_replace):            # procedure, to return the question asking
+    replaced = []                                           # "What should be substituted for NUMBER?"
+    sentence = sentence.split()                             # taking as input an user's input and replacing 
+    for word in sentence:                                   # NUMBER with it
         replacement = word_checker(word, check_list)
         if replacement != None:
             word = word.replace(replacement, check_list[num_to_replace])
@@ -96,8 +111,8 @@ def get_ques_numbered(sentence, num_to_replace):
     replaced = ' '.join(replaced)
     return replaced
 
-def get_sentence_filled(sentence, correct_answer, q_num):
-    replaced = []
+def get_sentence_filled(sentence, correct_answer, q_num):   # procedure, to return the game sentence filled with
+    replaced = []                                           # correct answers
     sentence = sentence.split()
     for word in sentence:
         replacement = word_checker(word, check_list)
@@ -112,10 +127,10 @@ def get_sentence_filled(sentence, correct_answer, q_num):
     replaced = ' '.join(replaced)
     return replaced
 
-def play_game(user_input_diffi, game_sentence):
-    q_num = 0
-    num_try = 0
-    while q_num < 4:
+def play_game(user_input_diffi, game_sentence, how_many_try):   # procedure that takes as input an user's input
+    q_num = 0                                                   # selecting game difficulty, original game sentence, 
+    num_try = 0                                                 # and a number that user input to select how many tries,
+    while q_num < 4:                                            # and prints each process accordingly as to correct or wrong
         user_input_answer = raw_input("\n" + get_ques_numbered(question, q_num) + "\n")
         correct_answer = get_answer(user_input_diffi)[q_num]
         if user_input_answer == correct_answer:
@@ -127,21 +142,23 @@ def play_game(user_input_diffi, game_sentence):
                 return "BUNGA!!! YOU'VE COMPLETED YOUR QUIZ!"
         else:
             num_try += 1
-            num_try_left = 5 - num_try             
-            print "Not quite! Try again. You have " + str(num_try_left) + " guess(es) left."
-            if num_try == 5:
+            num_try_left = int(how_many_try) - num_try             
+            print "INFO: Not quite! Try again. You have " + str(num_try_left) + " guess(es) left."
+            if num_try == int(how_many_try):
                 print "\n" + "GAME OVER."
-                user_input = raw_input("\n" + "Do you want to try again? Type yes or no" + "\n")
-                if user_input == "yes":
+                user_input = raw_input("\n" + "Q: Do you want to try again? Type yes or no" + "\n")    
+                if user_input == "yes":                                       
                     return opening()
                 else:
                     return "Bye~"
     
-def opening():
-    user_input_diffi = raw_input("\n" + ques_mode + "\n").lower()
+def opening():                                                          # procedure, for user to select a game mode
+    user_input_diffi = raw_input("\n" + ques_mode + "\n").lower()       # and how many tries user would take, which
+    user_input_how_many_try = raw_input("\n" + ques_num_try + "\n")     # prints opening, then returns 'play_game' procedure 
     game_sentence = get_game(user_input_diffi)
-    opening = info_difficulty + user_input_diffi + "\n\n" + info_num_try + "\n\n" + info_current_psg + "\n\n" + game_sentence + "\n"
+    sent_num_try = get_sent_num_try(info_num_try, user_input_how_many_try)
+    opening = info_difficulty + user_input_diffi + "\n\n" + sent_num_try + "\n\n" + info_current_psg + "\n\n" + game_sentence + "\n"
     print opening
-    return play_game(user_input_diffi, game_sentence)
+    return play_game(user_input_diffi, game_sentence, user_input_how_many_try)
 
 print opening()
