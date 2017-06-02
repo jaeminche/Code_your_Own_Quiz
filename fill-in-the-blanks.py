@@ -16,10 +16,7 @@
 # To help you get started, we've provided a sample paragraph that you can use when testing your code.
 # Your game should consist of 3 or more levels, so you should add your own paragraphs as well!
 
-sample = '''A ___1___ is created with the def keyword. You specify the inputs a ___1___ takes by
-adding ___2___ separated by commas between the parentheses. ___1___s by default return ___3___ if you
-don't specify the value to return. ___2___ can be standard data types such as string, number, dictionary,
-tuple, and ___4___ or can be more complicated such as objects and lambda functions.'''
+
 # The answer for ___1___ is 'function'. Can you figure out the others?
 
 # We've also given you a file called fill-in-the-blanks.pyc which is a working version of the project.
@@ -34,19 +31,29 @@ tuple, and ___4___ or can be more complicated such as objects and lambda functio
 
 # If you need help, you can sign up for a 1 on 1 coaching appointment: https://calendly.com/ipnd-1-1/20min/
 
-easy = '''    New __1__ is the biggest city of the USA. __2__ is the capital of Japan. 
-    __3__ is the capital of South Korea. __4__ is the capital of Canada.'''
-medium = '''    Jae-in __1__ is the president of South Korea now. Donald __2__ is 
+game_data = {
+	'easy' : {
+		'quiz' : '''    New __1__ is the biggest city of the USA. __2__ is the capital of Japan. 
+    __3__ is the capital of South Korea. __4__ is the capital of Canada.''',
+		'answer' : ['York', 'Tokyo', 'Seoul', 'Ottawa']
+	},
+
+	'medium' : {
+		'quiz' : '''    Jae-in __1__ is the president of South Korea now. Donald __2__ is 
     the president of USA. __3__ Obama is the previous 
-    president of USA, and his wife's first name is __4__.'''
-hard = '''    An existentialist novel 'Stranger' is written by Albert __1__. This novel is 
+    president of USA, and his wife's first name is __4__.''',
+		'answer' : ['Moon', 'Trump', 'Barack', 'Michelle']
+	},
+
+	'hard' : {
+		'quiz' : '''    An existentialist novel 'Stranger' is written by Albert __1__. This novel is 
     famous for its first sentence, 'Mother died today. Or maybe, yesterday; 
     I can't be sure', a quote by the main character, __2__. Norwegian Wood is 
     a Japanese novel written by Murakami __3__. In this novel, Watanabe longs for a girl 
-    named __4__, who also longs for her dead lover.'''
-answer_easy = ['York', 'Tokyo', 'Seoul', 'Ottawa']
-answer_medium = ['Moon', 'Trump', 'Barack', 'Michelle']
-answer_hard = ['Camus', 'Meursault', 'Haruki', 'Naoko']
+    named __4__, who also longs for her dead lover.''',
+	    'answer' : ['Camus', 'Meursault', 'Haruki', 'Naoko']
+	}
+}
 
 ques_mode = '''Q: Please select a game difficulty by typing it in!
 Possible choices include EASY, MEDIUM, and HARD!!'''
@@ -59,11 +66,11 @@ def get_game(caller):
     """take as input a user's input, and return a quiz sentence for the selected difficulty."""     
 
     if caller == 'easy':                                    
-        return easy
+        return game_data['easy']['quiz']
     if caller == 'medium':
-        return medium
+        return game_data['medium']['quiz']
     if caller == 'hard':
-        return hard      
+        return game_data['hard']['quiz']      
     else: # if user's input has a typo, give more tries
         print "INFO: Your input contains a typo. Type it again."   
         return opening()
@@ -72,11 +79,11 @@ def get_answer_list(answer_caller):
     """take as input a user's input, and return the corresponding answer list"""
 
     if answer_caller == 'easy':
-        return answer_easy
+        return game_data['easy']['answer']
     if answer_caller == 'medium':
-        return answer_medium
+        return game_data['medium']['answer']
     if answer_caller == 'hard':
-        return answer_hard   
+        return game_data['hard']['answer']   
 
 def get_num_try(u_input_num_try):
     """
